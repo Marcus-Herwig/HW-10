@@ -3,7 +3,7 @@ package practice;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Driver
+public class Driver extends Thread
 {
 
 	public static void main(String[] args) 
@@ -65,7 +65,7 @@ public class Driver
 	}  
 	
 	
-	static void mergeSort(Integer[] ar, int begin, int end)
+	static Runnable mergeSort(Integer[] ar, int begin, int end)  
 	{
 		if(begin != end)
 		{
@@ -73,13 +73,36 @@ public class Driver
 			int end1 = begin + ((end - begin)/2);
 			int begin2 = end1 + 1;
 			int end2 = end;
-			mergeSort(ar, begin1, end1);
-			mergeSort(ar, begin2, end2);
-			merge(ar, begin1, end1, begin2, end2);
+			
+			
+			Thread merge1 = new Thread(mergeSort(ar, begin1, end1));
+			Thread merge2 = new Thread(mergeSort(ar, begin2, end2));
+			merge1.start();
+			merge2.start();
+			System.out.println("************** " + Thread.activeCount() + " **************");
+			try
+			{
+				merge1.join();
+				merge2.join();
+				
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}merge(ar, begin1, end1, begin2, end2);
+			//mergeSort(ar, begin1, end1);
+			//mergeSort(ar, begin2, end2);
+		//	merge(ar, begin1, end1, begin2, end2);
+			
+			
+			
+			
 		}
+		return null;
 	}
 	
-	static void merge(Integer[] ar, int begin1, int end1, int begin2, int end2)
+	static Runnable merge(Integer[] ar, int begin1, int end1, int begin2, int end2)
 	{
 		int[] temp = new int[end2 - begin1 + 1];
 		int pos1 = begin1;
@@ -123,6 +146,7 @@ public class Driver
 			ar[i] = temp[posInTemp];
 			posInTemp++;
 		}
+		return null;
 	}
 	
 	static int factorialRecursive(int val)

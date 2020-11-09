@@ -2,7 +2,7 @@ package practice;
 
 import java.util.ArrayList;
 
-public class Player {
+public class Player{
 	int age;
 	Player(int age)
 	{
